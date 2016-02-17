@@ -71,6 +71,17 @@ module.exports = ServiceController =
 
         @sync src, dst, config
 
+        if config.behaviour?.remoteExecOnUpload is true
+            hosts   = config.remote.host
+            cmds    = config.remote.cmds
+            options = {
+                port: 22,
+                username: config.remote.user,
+                privateKey: fs.readFileSync(config.option.privateKey)
+            }
+
+            @rexec hosts, cmds, options, config
+
     # Core
     genRemoteString: (user, remoteAddr, remotePath) ->
         result = "#{remoteAddr}:#{remotePath}"
@@ -97,3 +108,25 @@ module.exports = ServiceController =
                 #atom.notifications.addError "#{err}, please review your config file."
                 #console.error cmd
                 @console.log "<span class='error'>#{err}, please review your config file.</span>\n"
+
+    rexec: (hosts, cmds, options = {}, config = {}, provider = 'rexec-service') ->
+        @console.show() if not config.behaviour.forgetConsole
+        @console.log "<span class='info'>Remote exec on #{hosts} eith cmd #{cmds}</span> ..."
+
+        (require '../service/' + provider)
+            hosts: hosts,
+            cmds: cmds,
+            options: options,
+            config: config,
+            progress: (msg) =>
+                @console.log msg
+            result: (err) =>
+                if err != null
+                    @console.log "<span class='error'>#{err}, please review your rexec config file.</span>\n"
+                else
+                    @console.log "<span class='success'>Remote exec completed without error.</span>\n"
+                    if config.behaviour?.autoHideConsole
+                        clearTimeout @_timer
+                        @_timer = setTimeout (=>
+                            @console.hide()
+                        ), 5000

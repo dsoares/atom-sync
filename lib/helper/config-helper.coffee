@@ -44,13 +44,16 @@ module.exports = ConfigHelper =
             host: "HOSTNAME",
             user: "USERNAME",
             path: "REMOTE_DIR"
+            cmds: "touch /tmp/foo"
         behaviour:
             uploadOnSave: true
             syncDownOnOpen: true
             forgetConsole: false
             autoHideConsole: true
             alwaysSyncAll: false
+            remoteExecOnUpload: true
         option:
+            privateKey: 'PATH_TO_SSH_PRIVATE_KEY'
             deleteFiles: false
             exclude: [
                 '.sync-config.cson'

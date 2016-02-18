@@ -43,7 +43,8 @@ module.exports = ConfigHelper =
         remote:
             host: "HOSTNAME",
             user: "USERNAME",
-            path: "REMOTE_DIR"
+            port: 22,
+            path: "REMOTE_DIR",
             cmds: "touch /tmp/foo"
         behaviour:
             uploadOnSave: true
@@ -53,7 +54,7 @@ module.exports = ConfigHelper =
             alwaysSyncAll: false
             remoteExecOnUpload: true
         option:
-            privateKey: 'PATH_TO_SSH_PRIVATE_KEY'
+            privateKey: 'PATH_TO_SSH_PRIVATE_KEY',
             deleteFiles: false
             exclude: [
                 '.sync-config.cson'

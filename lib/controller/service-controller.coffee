@@ -75,7 +75,7 @@ module.exports = ServiceController =
             hosts   = config.remote.host
             cmds    = config.remote.cmds
             options = {
-                port: 22,
+                port: config.remote.port,
                 username: config.remote.user,
                 privateKey: fs.readFileSync(config.option.privateKey)
             }
@@ -111,7 +111,7 @@ module.exports = ServiceController =
 
     rexec: (hosts, cmds, options = {}, config = {}, provider = 'rexec-service') ->
         @console.show() if not config.behaviour.forgetConsole
-        @console.log "<span class='info'>Remote exec on #{hosts} eith cmd #{cmds}</span> ..."
+        @console.log "<span class='info'>Remote exec on #{hosts} with cmd #{cmds}</span> ..."
 
         (require '../service/' + provider)
             hosts: hosts,
